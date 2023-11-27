@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -8,35 +9,73 @@ export const metadata: Metadata = {
   description: "This is Signin page for TailAdmin Next.js",
   // other metadata
 };
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const SignIn: React.FC = () => {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (e: any) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const router = useRouter();
+
+  const handleLogin = async (e: any) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/auth/login",
+        formData
+      );
+
+      if (response.status === 200) {
+        const token = response.data.accessToken; // Ubah ke accessToken sesuai respons dari server
+        document.cookie = `auth_token=${token}; path=/`;
+        // Redirect atau lakukan tindakan lain sesuai dengan keberhasilan login
+        router.push("/dashboard");
+
+        console.log("Login berhasil");
+      } else {
+        // Handle kesalahan login
+        console.error("Login gagal");
+      }
+    } catch (error) {
+      // Handle kesalahan permintaan
+      console.error(error);
+    }
+  };
+
   return (
-    <div className="p-10">
+    <div className="p-5">
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
-              <Link className="mb-5.5 inline-block" href="/">
+              <Link className="inline-block" href="/">
                 <Image
                   className="hidden dark:block"
-                  src={"/images/logo/logo.svg"}
+                  src={"/images/logo/panti-logo.png"}
                   alt="Logo"
-                  width={176}
+                  width={90}
                   height={32}
                 />
                 <Image
                   className="dark:hidden"
-                  src={"/images/logo/logo-dark.svg"}
+                  src={"/images/logo/panti-logo.png"}
                   alt="Logo"
-                  width={176}
+                  width={90}
                   height={32}
                 />
               </Link>
 
-              <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
-              </p>
+              <p className="2xl:px-20 font-bold">Panti Asuhan</p>
 
               <span className="mt-15 inline-block">
                 <svg
@@ -167,10 +206,10 @@ const SignIn: React.FC = () => {
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               <span className="mb-1.5 block font-medium">Start for free</span>
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign In to TailAdmin
+                Sign In to Panti Asuhan
               </h2>
 
-              <form>
+              <form onSubmit={handleLogin}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
@@ -178,6 +217,10 @@ const SignIn: React.FC = () => {
                   <div className="relative">
                     <input
                       type="email"
+                      name="email"
+                      id="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -204,12 +247,16 @@ const SignIn: React.FC = () => {
 
                 <div className="mb-6">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Re-type Password
+                    Password
                   </label>
                   <div className="relative">
                     <input
                       type="password"
-                      placeholder="6+ Characters, 1 Capital letter"
+                      name="password"
+                      id="password"
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      placeholder="Enter your password"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
 

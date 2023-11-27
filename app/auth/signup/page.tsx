@@ -1,8 +1,12 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { Metadata } from "next";
+import { useRouter } from "next/navigation";
+
 export const metadata: Metadata = {
   title: "Signup Page | Next.js E-commerce Dashboard Template",
   description: "This is Signup page for TailAdmin Next.js",
@@ -10,32 +14,61 @@ export const metadata: Metadata = {
 };
 
 const SignUp: React.FC = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+  });
+
+  const handleChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const router = useRouter();
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/auth/register",
+        formData
+      );
+      router.push("/auth/signin");
+
+      console.log("response :>> ", response);
+    } catch (error: any) {
+      if (error.response && error.response) {
+        console.log(error.response);
+      } else {
+        console.log("Registration failed");
+      }
+    }
+  };
+
   return (
     <div className="p-5">
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
-            <div className="py-17.5 px-26 text-center">
-              <Link className="mb-5.5 inline-block" href="/">
+            <div className="pb-17.5 px-26 text-center">
+              <Link className=" inline-block" href="/">
                 <Image
                   className="hidden dark:block"
-                  src={"/images/logo/logo.svg"}
+                  src={"/images/logo/panti-logo.png"}
                   alt="Logo"
-                  width={176}
+                  width={90}
                   height={32}
                 />
                 <Image
                   className="dark:hidden"
-                  src={"/images/logo/logo-dark.svg"}
+                  src={"/images/logo/panti-logo.png"}
                   alt="Logo"
-                  width={176}
+                  width={90}
                   height={32}
                 />
               </Link>
-              <p className="2xl:px-20">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                suspendisse.
-              </p>
+              <p className="2xl:px-20 font-bold">Panti Asuhan</p>
 
               <span className="mt-15 inline-block">
                 <svg
@@ -166,10 +199,10 @@ const SignUp: React.FC = () => {
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
               <span className="mb-1.5 block font-medium">Start for free</span>
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign Up to TailAdmin
+                Sign Up to Panti Asuhan
               </h2>
 
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Name
@@ -177,6 +210,11 @@ const SignUp: React.FC = () => {
                   <div className="relative">
                     <input
                       type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
                       placeholder="Enter your full name"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -212,6 +250,11 @@ const SignUp: React.FC = () => {
                   <div className="relative">
                     <input
                       type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -243,6 +286,11 @@ const SignUp: React.FC = () => {
                   <div className="relative">
                     <input
                       type="password"
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
                       placeholder="Enter your password"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -278,6 +326,11 @@ const SignUp: React.FC = () => {
                   <div className="relative">
                     <input
                       type="password"
+                      id="password_confirmation"
+                      name="password_confirmation"
+                      value={formData.password_confirmation}
+                      onChange={handleChange}
+                      required
                       placeholder="Re-enter your password"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
