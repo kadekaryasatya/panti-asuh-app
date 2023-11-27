@@ -3,15 +3,15 @@ import PengursPanti from "@/components/Dashboard/PengurusPanti";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Pengurus Panti Page | Panti Asuhan",
-  description: "This is Pengurus Panti page for Panti Asuhan App",
+  title: "Artikel Panti Page | Panti Asuhan",
+  description: "This is Artikel Panti page for Panti Asuhan App",
   // other metadata
 };
 
-const PengurusPantiPage = () => {
+const ArtikelPage = () => {
   return (
     <>
-      <Breadcrumb pageName="Pengurus Panti" />
+      <Breadcrumb pageName="Artikel Panti" />
 
       <div className="flex flex-col gap-10">
         <PengursPanti />
@@ -20,4 +20,4 @@ const PengurusPantiPage = () => {
   );
 };
 
-export default PengurusPantiPage;
+export default ArtikelPage;
