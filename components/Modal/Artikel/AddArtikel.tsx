@@ -1,25 +1,24 @@
-import { PengurusPanti } from "@/types/pengurus-panti";
-import React, { useState } from "react";
+import { Artikel } from "@/types/artikel";
+import React, { useState, ChangeEvent } from "react";
+import Image from "next/image";
 
-interface AddPengurusModalProps {
+interface ArtikelModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddPengurus: (pengurus: PengurusPanti) => void;
+  onAddArtikel: (artikel: Artikel) => void;
 }
 
-const AddPengurusModal: React.FC<AddPengurusModalProps> = ({
+const AddArtikelModal: React.FC<ArtikelModalProps> = ({
   isOpen,
   onClose,
-  onAddPengurus,
+  onAddArtikel,
 }) => {
-  const [formData, setFormData] = useState<PengurusPanti>({
+  const [formData, setFormData] = useState<Artikel>({
     id: 0,
-    nama: "",
-    alamat: "",
-    tempat_lahir: "",
-    tanggal_lahir: "",
-    no_telepon: "",
-    isActive: "aktif",
+    judul: "",
+    deskripsi: "",
+    pengurus_panti_id: 0,
+    gambar: null,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,24 +29,19 @@ const AddPengurusModal: React.FC<AddPengurusModalProps> = ({
     }));
   };
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    // Access the first file from the input
+    const file = e.target.files?.[0];
+    setFormData((prevData) => ({
+      ...prevData,
+      gambar: file ? URL.createObjectURL(file) : null,
+    }));
+  };
+
   const handleSubmit = () => {
     // You can add validation here before submitting
-    onAddPengurus(formData);
+    onAddArtikel(formData);
     onClose();
-  };
-
-  const handleDateChange = (date: string) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      tanggal_lahir: date,
-    }));
-  };
-
-  const handleToggleChange = () => {
-    setFormData((prevData) => ({
-      ...prevData,
-      isActive: prevData.isActive === "aktif" ? "non-aktif" : "aktif",
-    }));
   };
 
   return (
@@ -58,18 +52,18 @@ const AddPengurusModal: React.FC<AddPengurusModalProps> = ({
     >
       <div className="bg-white p-8 max-w-md w-full rounded-lg shadow-md border shadow-[#2D9596]">
         <div className="text-xl font-bold mb-4 dark:text-black">
-          Add Pengurus
+          Add Artikel
         </div>
 
         {/* Form inputs */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-black">
-            Nama
+            Judul
           </label>
           <input
             type="text"
-            name="nama"
-            value={formData.nama}
+            name="judul"
+            value={formData.judul}
             onChange={handleInputChange}
             className="mt-1 p-2 w-full border rounded-md"
           />
@@ -77,12 +71,12 @@ const AddPengurusModal: React.FC<AddPengurusModalProps> = ({
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-black">
-            Alamat
+            Deskripsi
           </label>
           <input
             type="text"
-            name="alamat"
-            value={formData.alamat}
+            name="deskripsi"
+            value={formData.deskripsi}
             onChange={handleInputChange}
             className="mt-1 p-2 w-full border rounded-md"
           />
@@ -90,58 +84,43 @@ const AddPengurusModal: React.FC<AddPengurusModalProps> = ({
 
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-black">
-            Tempat Lahir
+            Pengurus Panti ID
           </label>
           <input
-            type="text"
-            name="tempat_lahir"
-            value={formData.tempat_lahir}
+            type="number"
+            name="pengurus_panti_id"
+            value={formData.pengurus_panti_id}
             onChange={handleInputChange}
             className="mt-1 p-2 w-full border rounded-md"
           />
         </div>
 
+        {/* Add file input for gambar */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 dark:text-black">
-            Tanggal Lahir
+            Gambar
           </label>
           <input
-            type="date"
-            name="tanggal_lahir"
-            value={formData.tanggal_lahir}
-            onChange={(e) => handleDateChange(e.target.value)}
+            type="file"
+            accept="image/*"
+            name="gambar"
+            onChange={handleFileChange}
             className="mt-1 p-2 w-full border rounded-md"
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 dark:text-black">
-            No Telepon
-          </label>
-          <input
-            type="tel"
-            name="no_telepon"
-            value={formData.no_telepon}
-            onChange={handleInputChange}
-            className="mt-1 p-2 w-full border rounded-md"
-          />
-        </div>
-
-        <div className="mb-4 flex gap-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-black">
-            Aktif
-          </label>
-          <div className="flex items-center">
-            <input
-              type="checkbox"
-              name="isActive"
-              checked={formData.isActive === "aktif"}
-              onChange={handleToggleChange}
-              className="form-checkbox h-5 w-5 text-blue-500"
+        {/* Display preview of the selected image */}
+        {formData.gambar && (
+          <div className="mb-4">
+            <Image
+              width={500}
+              height={500}
+              src={formData.gambar}
+              alt="Gambar Artikel"
+              className="max-w-full h-auto rounded-md"
             />
-            <span className="ml-2"></span>
           </div>
-        </div>
+        )}
 
         {/* Buttons */}
         <div className="flex justify-end">
@@ -163,4 +142,4 @@ const AddPengurusModal: React.FC<AddPengurusModalProps> = ({
   );
 };
 
-export default AddPengurusModal;
+export default AddArtikelModal;

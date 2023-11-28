@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import PengursPanti from "@/components/Dashboard/PengurusPanti";
+import ArtikelList from "@/components/Dashboard/Artikel";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ const ArtikelPage = () => {
       <Breadcrumb pageName="Artikel Panti" />
 
       <div className="flex flex-col gap-10">
-        <PengursPanti />
+        <ArtikelList />
       </div>
     </>
   );

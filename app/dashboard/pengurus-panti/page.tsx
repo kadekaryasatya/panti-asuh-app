@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import PengursPanti from "@/components/Dashboard/PengurusPanti";
+import PengurusPantiList from "@/components/Dashboard/PengurusPanti";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
@@ -14,7 +14,7 @@ const PengurusPantiPage = () => {
       <Breadcrumb pageName="Pengurus Panti" />
 
       <div className="flex flex-col gap-10">
-        <PengursPanti />
+        <PengurusPantiList />
       </div>
     </>
   );

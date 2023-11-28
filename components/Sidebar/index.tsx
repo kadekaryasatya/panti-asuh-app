@@ -380,10 +380,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </li>
               {/* <!-- Menu Item Pengurus Panti --> */}
 
-              {/* <!-- Menu Item Pengumuman  --> */}
+              {/* <!-- Menu Item Artikel  --> */}
               <li>
                 <Link
-                  href="/artikel"
+                  href="/dashboard/artikel"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                     pathname.includes("artikel") && "bg-graydark dark:bg-meta-4"
                   }`}

@@ -7,21 +7,21 @@ import { FaTrash, FaEdit, FaEye, FaPlus } from "react-icons/fa";
 import AddPengurusModal from "../Modal/PengurusPanti/AddPengursPanti";
 import Swal from "sweetalert2";
 import UpdatePengurusModal from "../Modal/PengurusPanti/UpdatePengurusPanti";
+import { Artikel } from "@/types/artikel";
+import AddArtikelModal from "../Modal/Artikel/AddArtikel";
 
-const defaultPengurusData: PengurusPanti = {
+const defaultArtikelData: Artikel = {
   id: 0,
-  nama: "",
-  alamat: "",
-  tempat_lahir: "",
-  tanggal_lahir: "",
-  no_telepon: "",
-  isActive: "aktif",
+  judul: "",
+  deskripsi: "",
+  pengurus_panti_id: 0,
+  gambar: "",
   created_at: null,
   updated_at: "",
 };
 
-const PengurusPantiList = () => {
-  const [pengurus, setPengurusData] = useState<PengurusPanti[]>([]);
+const ArtikelList = () => {
+  const [artikel, setArtikelData] = useState<Artikel[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [selectedPengurus, setSelectedPengurus] =
@@ -34,15 +34,12 @@ const PengurusPantiList = () => {
       try {
         const authToken = Cookies.get("auth_token");
         console.log("authToken :>> ", authToken);
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/pengurus-panti/",
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        setPengurusData(response.data);
+        const response = await axios.get("http://127.0.0.1:8000/api/artikel/", {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+        setArtikelData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -51,15 +48,15 @@ const PengurusPantiList = () => {
     fetchData();
   }, []);
 
-  //Add Pengurus
-  const handleAddPengurus = async (pengurus: PengurusPanti) => {
+  //Add Artikel
+  const handleAddPengurus = async (artikel: Artikel) => {
     try {
       const authToken = Cookies.get("auth_token");
 
       // Make a POST request to add new Pengurus
       const response = await axios.post(
-        "http://127.0.0.1:8000/api/pengurus-panti/",
-        pengurus,
+        "http://127.0.0.1:8000/api/artikel",
+        artikel,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -76,14 +73,14 @@ const PengurusPantiList = () => {
       const fetchData = async () => {
         try {
           const response = await axios.get(
-            "http://127.0.0.1:8000/api/pengurus-panti/",
+            "http://127.0.0.1:8000/api/artikel",
             {
               headers: {
                 Authorization: `Bearer ${authToken}`,
               },
             }
           );
-          setPengurusData(response.data);
+          setArtikelData(response.data);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -97,8 +94,8 @@ const PengurusPantiList = () => {
     }
   };
 
-  //Delete Pengurus
-  const handleDeletePengurus = async (id: number) => {
+  //Delete Artikel
+  const handleDeleteArtikel = async (id: number) => {
     try {
       const authToken = Cookies.get("auth_token");
 
@@ -115,8 +112,8 @@ const PengurusPantiList = () => {
 
       // If user confirms the deletion
       if (result.isConfirmed) {
-        // Make a DELETE request to delete Pengurus by ID
-        await axios.delete(`http://127.0.0.1:8000/api/pengurus-panti/${id}`, {
+        // Make a DELETE request to delete Artikel by ID
+        await axios.delete(`http://127.0.0.1:8000/api/artikel/${id}`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
@@ -125,12 +122,12 @@ const PengurusPantiList = () => {
         // Show success Swal alert
         Swal.fire({
           title: "Deleted!",
-          text: "Pengurus has been deleted.",
+          text: "Artikel has been deleted.",
           icon: "success",
         });
-        // Remove the deleted Pengurus from the state
-        setPengurusData((prevPengurus) =>
-          prevPengurus.filter((pengurusItem) => pengurusItem.id !== id)
+        // Remove the deleted Artikel from the state
+        setArtikelData((prevArtikel) =>
+          prevArtikel.filter((artikelItem) => artikelItem.id !== id)
         );
       }
     } catch (error) {
@@ -140,43 +137,43 @@ const PengurusPantiList = () => {
   };
 
   //Update Pengurus
-  const handleEditPengurus = (pengurusItem: PengurusPanti) => {
-    setSelectedPengurus(pengurusItem);
-    setIsUpdateModalOpen(true);
-  };
+  // const handleEditPengurus = (pengurusItem: PengurusPanti) => {
+  //   setSelectedPengurus(pengurusItem);
+  //   setIsUpdateModalOpen(true);
+  // };
 
-  const handleUpdatePengurus = async (updatedPengurus: PengurusPanti) => {
-    try {
-      const authToken = Cookies.get("auth_token");
+  // const handleUpdatePengurus = async (updatedPengurus: PengurusPanti) => {
+  //   try {
+  //     const authToken = Cookies.get("auth_token");
 
-      // Make a PUT request to update Pengurus by ID
-      await axios.put(
-        `http://127.0.0.1:8000/api/pengurus-panti/${updatedPengurus.id}`,
-        updatedPengurus,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
+  //     // Make a PUT request to update Pengurus by ID
+  //     await axios.put(
+  //       `http://127.0.0.1:8000/api/pengurus-panti/${updatedPengurus.id}`,
+  //       updatedPengurus,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${authToken}`,
+  //         },
+  //       }
+  //     );
 
-      // Update the PengurusData state with the updated Pengurus
-      setPengurusData((prevPengurus) =>
-        prevPengurus.map((pengurusItem) =>
-          pengurusItem.id === updatedPengurus.id
-            ? updatedPengurus
-            : pengurusItem
-        )
-      );
+  //     // Update the PengurusData state with the updated Pengurus
+  //     setPengurusData((prevPengurus) =>
+  //       prevPengurus.map((pengurusItem) =>
+  //         pengurusItem.id === updatedPengurus.id
+  //           ? updatedPengurus
+  //           : pengurusItem
+  //       )
+  //     );
 
-      // Close the update modal
-      setIsUpdateModalOpen(false);
-      Swal.fire("Saved", "", "success");
-    } catch (error) {
-      // Handle errors, e.g., display an error message to the user
-      console.error("Error updating Pengurus:", error);
-    }
-  };
+  //     // Close the update modal
+  //     setIsUpdateModalOpen(false);
+  //     Swal.fire("Saved", "", "success");
+  //   } catch (error) {
+  //     // Handle errors, e.g., display an error message to the user
+  //     console.error("Error updating Pengurus:", error);
+  //   }
+  // };
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-5 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -192,39 +189,36 @@ const PengurusPantiList = () => {
           </button>
 
           {/* Modal component */}
-          <AddPengurusModal
+          <AddArtikelModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            onAddPengurus={handleAddPengurus}
+            onAddArtikel={handleAddPengurus}
           />
 
-          <UpdatePengurusModal
+          {/* <UpdatePengurusModal
             isOpen={isUpdateModalOpen}
             onClose={() => setIsUpdateModalOpen(false)}
             onUpdatePengurus={handleUpdatePengurus}
             pengurusData={selectedPengurus || defaultPengurusData}
-          />
+          /> */}
         </div>
         <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[200px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                Nama
+                Judul
               </th>
               <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-                Alamat
+                Deskripsi
               </th>
               <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                Tempat Lahir
+                Pengurus Panti
               </th>
               <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                Tanggal Lahir
+                Tanggal Dibuat
               </th>
               <th className="min-w-[120px] py-4 px-4 font-medium text-black dark:text-white">
-                No telepon
-              </th>
-              <th className="py-4 px-4 font-medium text-black dark:text-white">
-                Aktif
+                Gambar
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
                 Action
@@ -232,46 +226,34 @@ const PengurusPantiList = () => {
             </tr>
           </thead>
           <tbody>
-            {pengurus.map((pengurusItem, key) => (
+            {artikel.map((artikelItem, key) => (
               <tr key={key}>
                 <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
                   <h5 className="font-medium text-black dark:text-white">
-                    {pengurusItem.nama}
+                    {artikelItem.judul}
                   </h5>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {pengurusItem.alamat}
+                    {artikelItem.deskripsi}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {pengurusItem.tempat_lahir}
+                    {artikelItem.pengurus_panti_id}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {pengurusItem.tanggal_lahir}
+                    {artikelItem.created_at}
                   </p>
                 </td>
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <p className="text-black dark:text-white">
-                    {pengurusItem.no_telepon}
+                    {artikelItem.gambar}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p
-                    className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                      pengurusItem.isActive === "aktif"
-                        ? "text-success bg-success"
-                        : pengurusItem.isActive === "non-aktif"
-                        ? "text-danger bg-danger"
-                        : "text-warning bg-warning"
-                    }`}
-                  >
-                    {pengurusItem.isActive}
-                  </p>
-                </td>
+
                 <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                   <div className="flex items-center space-x-3.5">
                     <button className="cursor-pointer hover:text-primary">
@@ -279,13 +261,13 @@ const PengurusPantiList = () => {
                     </button>
                     <button
                       className="cursor-pointer hover:text-[#FFC436]"
-                      onClick={() => handleEditPengurus(pengurusItem)}
+                      // onClick={() => handleEditPengurus(pengurusItem)}
                     >
                       <FaEdit />
                     </button>
                     <button
                       className="cursor-pointer hover:text-[#B31312]"
-                      onClick={() => handleDeletePengurus(pengurusItem.id)}
+                      onClick={() => handleDeleteArtikel(artikelItem.id)}
                     >
                       <FaTrash />
                     </button>
@@ -300,4 +282,4 @@ const PengurusPantiList = () => {
   );
 };
 
-export default PengurusPantiList;
+export default ArtikelList;
