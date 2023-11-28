@@ -5,7 +5,7 @@ export type PengurusPanti = {
   tempat_lahir: string;
   tanggal_lahir: string;
   no_telepon: string;
-  isActive: "aktif" | "non-aktif"; // Assuming isActive can only be 'aktif' or 'nonaktif'
-  created_at: string | null;
-  updated_at: string;
+  isActive: "aktif" | "non-aktif";
+  created_at?: string | null;
+  updated_at?: string;
 };
