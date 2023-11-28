@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { User } from "@/types/user";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [user, setUserData] = useState<User>();
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -34,6 +38,28 @@ const DropdownUser = () => {
     return () => document.removeEventListener("keydown", keyHandler);
   });
 
+  //Get All Data
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const authToken = Cookies.get("auth_token");
+        console.log("authToken :>> ", authToken);
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/auth/user",
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        setUserData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   return (
     <div className="relative">
       <Link
@@ -44,9 +70,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {user?.name}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{user?.email}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">
