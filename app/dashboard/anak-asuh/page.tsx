@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import DataAnak from "@/components/Dashboard/DataAnak";
+import DataAnakList from "@/components/Dashboard/DataAnak";
 import TableOne from "@/components/Tables/TableOne";
 import TableThree from "@/components/Tables/TableThree";
 import TableTwo from "@/components/Tables/TableTwo";
@@ -17,7 +17,7 @@ const AnakPantiPage = () => {
       <Breadcrumb pageName="Anak Panti" />
 
       <div className="flex flex-col gap-10">
-        <DataAnak />
+        <DataAnakList />
       </div>
     </>
   );

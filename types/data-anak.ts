@@ -9,6 +9,6 @@ export type DataAnak = {
   akta_kelahiran: string;
   kartu_keluarga: string;
   ktp: string;
-  created_at: string | null;
-  updated_at: string;
+  created_at?: string | null;
+  updated_at?: string;
 };
