@@ -20,6 +20,37 @@ const defaultPengurusData: PengurusPanti = {
   updated_at: "",
 };
 
+export async function getServerSideProps(context: any) {
+  try {
+    const authToken = Cookies.get("auth_token");
+
+    // Lakukan pengambilan data dari API atau sumber eksternal lainnya
+    const response = await axios.get(
+      "http://127.0.0.1:8000/api/pengurus-panti/",
+      {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+
+    // Kembalikan data sebagai prop
+    return {
+      props: {
+        pengurus: response.data,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    // Jika terjadi kesalahan, Anda dapat menangani secara sesuai dengan kebutuhan aplikasi Anda
+    return {
+      props: {
+        pengurus: [], // Set data ke array kosong atau nilai default
+      },
+    };
+  }
+}
+
 const PengurusPantiList = () => {
   const [pengurus, setPengurusData] = useState<PengurusPanti[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -232,67 +263,71 @@ const PengurusPantiList = () => {
             </tr>
           </thead>
           <tbody>
-            {pengurus.map((pengurusItem, key) => (
-              <tr key={key}>
-                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
-                    {pengurusItem.nama}
-                  </h5>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {pengurusItem.alamat}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {pengurusItem.tempat_lahir}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {pengurusItem.tanggal_lahir}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {pengurusItem.no_telepon}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p
-                    className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
-                      pengurusItem.isActive === "aktif"
-                        ? "text-success bg-success"
-                        : pengurusItem.isActive === "non-aktif"
-                        ? "text-danger bg-danger"
-                        : "text-warning bg-warning"
-                    }`}
-                  >
-                    {pengurusItem.isActive}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <div className="flex items-center space-x-3.5">
-                    <button className="cursor-pointer hover:text-primary">
-                      <FaEye />
-                    </button>
-                    <button
-                      className="cursor-pointer hover:text-[#FFC436]"
-                      onClick={() => handleEditPengurus(pengurusItem)}
+            {pengurus ? (
+              pengurus.map((pengurusItem, key) => (
+                <tr key={key}>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {pengurusItem.nama}
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      {pengurusItem.alamat}
+                    </p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      {pengurusItem.tempat_lahir}
+                    </p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      {pengurusItem.tanggal_lahir}
+                    </p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      {pengurusItem.no_telepon}
+                    </p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p
+                      className={`inline-flex rounded-full bg-opacity-10 py-1 px-3 text-sm font-medium ${
+                        pengurusItem.isActive === "aktif"
+                          ? "text-success bg-success"
+                          : pengurusItem.isActive === "non-aktif"
+                          ? "text-danger bg-danger"
+                          : "text-warning bg-warning"
+                      }`}
                     >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="cursor-pointer hover:text-[#B31312]"
-                      onClick={() => handleDeletePengurus(pengurusItem.id)}
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                      {pengurusItem.isActive}
+                    </p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <div className="flex items-center space-x-3.5">
+                      <button className="cursor-pointer hover:text-primary">
+                        <FaEye />
+                      </button>
+                      <button
+                        className="cursor-pointer hover:text-[#FFC436]"
+                        onClick={() => handleEditPengurus(pengurusItem)}
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        className="cursor-pointer hover:text-[#B31312]"
+                        onClick={() => handleDeletePengurus(pengurusItem.id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <p className="text-black dark:text-white">No Data found</p>
+            )}
           </tbody>
         </table>
       </div>

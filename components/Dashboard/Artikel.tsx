@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import UpdatePengurusModal from "../Modal/PengurusPanti/UpdatePengurusPanti";
 import { Artikel } from "@/types/artikel";
 import AddArtikelModal from "../Modal/Artikel/AddArtikel";
+import Image from "next/image";
 
 const defaultArtikelData: Artikel = {
   id: 0,
@@ -34,12 +35,15 @@ const ArtikelList = () => {
       try {
         const authToken = Cookies.get("auth_token");
         console.log("authToken :>> ", authToken);
-        const response = await axios.get("http://127.0.0.1:8000/api/artikel/", {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
-        setArtikelData(response.data);
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BACKEND}/api/artikel`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        setArtikelData(response.data.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -49,7 +53,7 @@ const ArtikelList = () => {
   }, []);
 
   //Add Artikel
-  const handleAddPengurus = async (artikel: Artikel) => {
+  const handleAddArtikel = async (artikel: Artikel) => {
     try {
       const authToken = Cookies.get("auth_token");
 
@@ -80,7 +84,7 @@ const ArtikelList = () => {
               },
             }
           );
-          setArtikelData(response.data);
+          setArtikelData(response.data.data);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -90,7 +94,7 @@ const ArtikelList = () => {
       fetchData();
     } catch (error) {
       // Handle errors, e.g., display an error message to the user
-      console.error("Error adding Pengurus:", error);
+      console.error("Error adding Artikel:", error);
     }
   };
 
@@ -174,7 +178,6 @@ const ArtikelList = () => {
   //     console.error("Error updating Pengurus:", error);
   //   }
   // };
-
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-5 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
@@ -192,7 +195,7 @@ const ArtikelList = () => {
           <AddArtikelModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-            onAddArtikel={handleAddPengurus}
+            onAddArtikel={handleAddArtikel}
           />
 
           {/* <UpdatePengurusModal
@@ -226,55 +229,66 @@ const ArtikelList = () => {
             </tr>
           </thead>
           <tbody>
-            {artikel.map((artikelItem, key) => (
-              <tr key={key}>
-                <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
-                    {artikelItem.judul}
-                  </h5>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {artikelItem.deskripsi}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {artikelItem.pengurus_panti_id}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {artikelItem.created_at}
-                  </p>
-                </td>
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {artikelItem.gambar}
-                  </p>
-                </td>
+            {artikel ? (
+              artikel.map((artikelItem, key) => (
+                <tr key={key}>
+                  <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                    <h5 className="font-medium text-black dark:text-white">
+                      {artikelItem.judul}
+                    </h5>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      {artikelItem.deskripsi}
+                    </p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      {artikelItem.pengurus_panti_id}
+                    </p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      {artikelItem.created_at}
+                    </p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p className="text-black dark:text-white">
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_API_BACKEND}/storage/artikel/${artikelItem.gambar}`}
+                        alt="Gambar Artikel"
+                        width={500}
+                        height={500}
+                      />
+                    </p>
+                  </td>
 
-                <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                  <div className="flex items-center space-x-3.5">
-                    <button className="cursor-pointer hover:text-primary">
-                      <FaEye />
-                    </button>
-                    <button
-                      className="cursor-pointer hover:text-[#FFC436]"
-                      // onClick={() => handleEditPengurus(pengurusItem)}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      className="cursor-pointer hover:text-[#B31312]"
-                      onClick={() => handleDeleteArtikel(artikelItem.id)}
-                    >
-                      <FaTrash />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <div className="flex items-center space-x-3.5">
+                      <button className="cursor-pointer hover:text-primary">
+                        <FaEye />
+                      </button>
+                      <button
+                        className="cursor-pointer hover:text-[#FFC436]"
+                        // onClick={() => handleEditPengurus(pengurusItem)}
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        className="cursor-pointer hover:text-[#B31312]"
+                        onClick={() => handleDeleteArtikel(artikelItem.id)}
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <p className="py-4 px-4 font-medium text-black dark:text-white">
+                No Dara
+              </p>
+            )}
           </tbody>
         </table>
       </div>
