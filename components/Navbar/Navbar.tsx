@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
         <div className="flex gap-3">
           <Link
             href="/donasi"
-            className="bg-background2 text-background rounded-md py-2 px-4 font-bold uppercase tracking-widest text-xs"
+            className="hover:bg-background2 bg-[#23549e] text-background rounded-md py-2 px-4 font-bold uppercase tracking-widest text-xs"
           >
             Donasi
           </Link>
@@ -91,7 +91,7 @@ const NavItem: React.FC<{ href: string; children: any }> = ({
     <Link href={href}>
       <div
         className={`hover:border-b-[1px] tracking-widest text-xs ${
-          currentPathname === href ? "border-b-[2px]" : ""
+          currentPathname === href ? "border-b-[2px] text-[#23549e]" : ""
         }`}
       >
         {children}
@@ -109,7 +109,7 @@ const MobileNavItem: React.FC<{ href: string; children: any }> = ({
     <Link href={href}>
       <div
         className={`hover:border-b-[1px] tracking-widest ${
-          currentPathname === href ? "border-b-[2px]" : ""
+          currentPathname === href ? "border-b-[2px] text-[#23549e] " : ""
         }`}
       >
         {children}
