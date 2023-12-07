@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 
 import DarkModeSwitcher from "../Header/DarkModeSwitcher";
 
@@ -65,7 +66,7 @@ const Navbar: React.FC = () => {
         </div>
         {/* Mobile menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-0 left-0 bg-white w-full mt-20">
+          <div className="lg:hidden absolute top-0 left-0 bg-white w-full mt-20 z-10">
             <div className="flex flex-col items-center space-y-4 py-4 uppercase">
               <MobileNavItem href="/">Beranda</MobileNavItem>
               <MobileNavItem href="/anak-asuh">Anak Asuh</MobileNavItem>
@@ -85,9 +86,16 @@ const NavItem: React.FC<{ href: string; children: any }> = ({
   href,
   children,
 }) => {
+  const currentPathname = usePathname();
   return (
     <Link href={href}>
-      <div className=" hover:underline tracking-widest text-xs">{children}</div>
+      <div
+        className={`hover:border-b-[1px] tracking-widest text-xs ${
+          currentPathname === href ? "border-b-[2px]" : ""
+        }`}
+      >
+        {children}
+      </div>
     </Link>
   );
 };
@@ -96,9 +104,16 @@ const MobileNavItem: React.FC<{ href: string; children: any }> = ({
   href,
   children,
 }) => {
+  const currentPathname = usePathname();
   return (
     <Link href={href}>
-      <div className=" hover:underline tracking-widest">{children}</div>
+      <div
+        className={`hover:border-b-[1px] tracking-widest ${
+          currentPathname === href ? "border-b-[2px]" : ""
+        }`}
+      >
+        {children}
+      </div>
     </Link>
   );
 };
