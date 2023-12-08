@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar/Navbar";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Anak Panti Page ",
+  title: "Anak Asuh | SIMPATI ",
   description: "This is Anak Panti page for Panti Asuhan App",
   // other metadata
 };
