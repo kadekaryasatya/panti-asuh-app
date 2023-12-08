@@ -12,14 +12,14 @@ export const metadata: Metadata = {
   // other metadata
 };
 
-const ArtikelPage = () => {
+const DetailArtikelPage = () => {
   return (
     <div className="bg-white">
       <Navbar />
-      <Artikel />
+      <DetailArtikel />
       <Footer />
     </div>
   );
 };
 
-export default ArtikelPage;
+export default DetailArtikelPage;
