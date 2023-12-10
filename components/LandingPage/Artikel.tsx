@@ -105,7 +105,7 @@ const Artikel = () => {
         ) : artikel.length > 0 ? (
           <Slider
             {...settings}
-            className="scale-100 hover:scale-105 transition transform ease-in-out tracking-widest"
+            className="scale-100 lg:hover:scale-105 transition transform ease-in-out tracking-widest"
           >
             {artikel.map((artikelItem, key) => (
               <div key={key} className="slide-gap ">

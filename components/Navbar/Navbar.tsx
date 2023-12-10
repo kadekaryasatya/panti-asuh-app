@@ -24,7 +24,9 @@ const Navbar: React.FC = () => {
               src={"/images/logo/panti-logo.png"}
               alt="Logo"
             />
-            <h1 className="text-sm font-bold tracking-widest">SIMPATI</h1>
+            <h1 className="text-sm font-bold tracking-widest text-[#23549e] ">
+              SIMPATI
+            </h1>
           </Link>
         </div>
         <div></div>

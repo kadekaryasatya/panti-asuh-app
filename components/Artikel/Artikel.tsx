@@ -118,7 +118,7 @@ const Artikel = () => {
                 <Link
                   key={key}
                   href={`/artikel/${artikelItem.id}`}
-                  className="flex flex-col items-center w-full  bg-white border-gray-200 rounded-lg shadow-lg hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                  className="scale-95 lg:hover:scale-100 transition transform ease-in-out tracking-widest flex flex-col items-center w-full  bg-white border-gray-200 rounded-lg shadow-lg hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                 >
                   <Image
                     width={300}
