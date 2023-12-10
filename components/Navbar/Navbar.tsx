@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
         <div className="flex gap-3">
           <Link
             href="/donasi"
-            className="hover:bg-background2 bg-[#23549e] text-background rounded-md py-2 px-4 font-bold uppercase tracking-widest text-xs"
+            className="hover:bg-background2 bg-[#23549e] scale-100 hover:scale-110 transition transform ease-in-out  text-background rounded-md py-2 px-4 font-bold uppercase tracking-widest text-xs"
           >
             Donasi
           </Link>
