@@ -103,12 +103,15 @@ const Artikel = () => {
             </div>
           ))
         ) : artikel.length > 0 ? (
-          <Slider {...settings}>
+          <Slider
+            {...settings}
+            className="scale-100 hover:scale-105 transition transform ease-in-out tracking-widest"
+          >
             {artikel.map((artikelItem, key) => (
-              <div key={key} className="slide-gap">
+              <div key={key} className="slide-gap ">
                 <Link
                   href={`/artikel/${artikelItem.id}`}
-                  className=" w-full flex flex-col items-center bg-[#F5F7F8]  md:flex-row shadow-lg rounded-lg"
+                  className=" w-full flex flex-col items-center bg-[#F5F7F8]  md:flex-row shadow-lg rounded-lg  "
                 >
                   <Image
                     width={300}

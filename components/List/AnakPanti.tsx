@@ -72,7 +72,7 @@ const AnakPanti = () => {
           height={700}
           src={"/images/anak-asuh/anak-asuh.jpg"}
           alt="Background"
-          className="object-cover w-full h-[400px] brightness-50 contrast-150 blur-sm"
+          className="object-cover w-full lg:h-[500px] h-[300px] brightness-50  blur-sm"
         />
 
         {/* Text Overlay */}
