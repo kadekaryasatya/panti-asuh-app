@@ -1,10 +1,71 @@
-import React from "react";
+"use client";
+import { DataAnak } from "@/types/data-anak";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const AnakPanti = () => {
+  const [anak, setAnakData] = useState<DataAnak[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const authToken = Cookies.get("auth_token");
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BACKEND}/api/anak-asuh`,
+          {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        setAnakData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Function to calculate age based on birthdate
+  const calculateAge = (birthdate: string) => {
+    const today = new Date();
+    const birthdateDate = new Date(birthdate);
+    let age = today.getFullYear() - birthdateDate.getFullYear();
+    const monthDiff = today.getMonth() - birthdateDate.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthdateDate.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  };
+
+  // Calculate the index of the last item on the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  // Calculate the index of the first item on the current page
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // Get the current items to be displayed on the page
+  const currentItems = anak.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Function to handle pagination click
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="lg:px-30 px-4 py-8 lg:py-16 text-background2 bg-white">
-      <h1 className="lg:text-3xl font-bold  mb-20">Anak Asuh</h1>
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-20">
+      <h1 className="lg:text-3xl font-bold mb-20">Anak Asuh</h1>
+      <div className="relative overflow-x-auto sm:rounded-lg mb-20">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
@@ -15,7 +76,7 @@ const AnakPanti = () => {
                 Nama
               </th>
               <th scope="col" className="px-6 py-3">
-                Kelas
+                Asal
               </th>
               <th scope="col" className="px-6 py-3">
                 Jenis Kelamin
@@ -26,84 +87,74 @@ const AnakPanti = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-              <th
-                scope="row"
-                className="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                1
-              </th>
-              <td className="px-6 py-4">Rizky Chandra</td>
-              <td className="px-6 py-4">3 SMA</td>
-              <td className="px-6 py-4">Laki-Laki</td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  17
-                </a>
+            {loading ? (
+              // Display skeleton cards while loading
+              [...Array(6)].map((_, index) => (
+                <tr key={index} className="">
+                  <th
+                    scope="row"
+                    className="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    <Skeleton height={20} width={50} />
+                  </th>
+                  <td className="px-6 py-4">
+                    <Skeleton height={20} width={80} />
+                  </td>
+                  <td className="px-6 py-4">
+                    <Skeleton height={20} width={80} />
+                  </td>
+                  <td className="px-6 py-4">
+                    <Skeleton height={20} width={80} />
+                  </td>
+                  <td className="px-6 py-4">
+                    <Skeleton height={20} width={50} />
+                  </td>
+                </tr>
+              ))
+            ) : anak.length > 0 ? (
+              currentItems.map((anakItem, index) => (
+                <tr key={index} className="shadow-lg  mb-4 ">
+                  <th
+                    scope="row"
+                    className="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  >
+                    {index + 1 + indexOfFirstItem}
+                  </th>
+                  <td className="px-6 py-4">{anakItem.nama}</td>
+                  <td className="px-6 py-4">{anakItem.tempat_lahir}</td>
+                  <td className="px-6 py-4">{anakItem.jenis_kelamin}</td>
+                  <td className="px-6 py-4">
+                    {calculateAge(anakItem.tanggal_lahir)}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <td className="font-medium text-black dark:text-white">
+                Tidak ada data Anak
               </td>
-            </tr>
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                2
-              </th>
-              <td className="px-6 py-4">Dede Oka</td>
-              <td className="px-6 py-4">1 SMA</td>
-              <td className="px-6 py-4">Laki-Laki</td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  15
-                </a>
-              </td>
-            </tr>
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                3
-              </th>
-              <td className="px-6 py-4">Ryo Riana</td>
-              <td className="px-6 py-4">1 SMP</td>
-              <td className="px-6 py-4">Laki-Laki</td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  13
-                </a>
-              </td>
-            </tr>
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-              <th
-                scope="row"
-                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                4
-              </th>
-              <td className="px-6 py-4">Mawar</td>
-              <td className="px-6 py-4">1 SMA</td>
-              <td className="px-6 py-4">Perempuan</td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  15
-                </a>
-              </td>
-            </tr>
+            )}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-center mt-4">
+        <ul className="flex space-x-2">
+          {[...Array(Math.ceil(anak.length / itemsPerPage)).keys()].map(
+            (page) => (
+              <li key={page + 1}>
+                <button
+                  onClick={() => handlePageChange(page + 1)}
+                  className={`px-3 py-2 rounded-md ${
+                    currentPage === page + 1
+                      ? "bg-background2 text-white"
+                      : "bg-white border border-gray-300 text-gray-700"
+                  }`}
+                >
+                  {page + 1}
+                </button>
+              </li>
+            )
+          )}
+        </ul>
       </div>
     </div>
   );
