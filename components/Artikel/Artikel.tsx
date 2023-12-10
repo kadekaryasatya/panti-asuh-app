@@ -10,6 +10,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 const Artikel = () => {
   const [artikel, setArtikelData] = useState<Artikel[]>([]);
+  const [pengurusData, setPengurusData] = useState<any[]>([]); // State to store pengurus data
   const [pagination, setPagination] = useState({
     total: 0,
     per_page: 5,
@@ -23,7 +24,7 @@ const Artikel = () => {
     fetchData();
   }, []);
 
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
@@ -40,24 +41,40 @@ const Artikel = () => {
           },
         }
       );
+
+      // Set artikel data
       setArtikelData(response.data.data);
       setPagination(response.data.pagination);
+
+      // Fetch and set pengurus data for each artikel
+      const pengurusPromises = response.data.data.map(
+        async (artikelItem: any) => {
+          const pengurusResponse = await axios.get(
+            `${process.env.NEXT_PUBLIC_API_BACKEND}/api/pengurus-panti/${artikelItem.pengurus_panti_id}`
+          );
+          return pengurusResponse.data;
+        }
+      );
+
+      const pengurusDataArray = await Promise.all(pengurusPromises);
+      setPengurusData(pengurusDataArray);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false); // Set loading to false once data is fetched
+      setLoading(false);
     }
   };
 
   const handlePageChange = (page: number) => {
     fetchData(page);
   };
+
   return (
     <div className="lg:px-30 px-4 py-8 lg:py-16 text-background2 bg-white">
       <h1 className="lg:text-4xl  text-3xl font-bold  mb-10 ">List Artikel</h1>
       <div className="">
         <div className="grid gap-x-4 gap-y-4 lg:grid-cols-3 md:grid-cols-2">
-          {loading ? ( // Check loading state
+          {loading ? (
             // Display skeleton cards while loading
             [...Array(6)].map((_, index) => (
               <div key={index} className="">
@@ -84,8 +101,10 @@ const Artikel = () => {
                   className="h-[200px] w-full object-cover rounded-t-lg"
                 />
                 <div className="flex flex-col justify-between p-4 leading-normal w-full">
-                  <p className="text-xs">
-                    Admin,
+                  <div className="flex text-xs">
+                    {pengurusData[key] && (
+                      <p className="">{pengurusData[key].nama},</p>
+                    )}
                     <span className="ml-1">
                       {artikelItem.created_at
                         ? new Date(artikelItem.created_at).toLocaleDateString(
@@ -98,7 +117,7 @@ const Artikel = () => {
                           )
                         : "No date available"}
                     </span>
-                  </p>
+                  </div>
 
                   <h5 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white text-[#23549e] hover:text-background2">
                     {artikelItem.judul}

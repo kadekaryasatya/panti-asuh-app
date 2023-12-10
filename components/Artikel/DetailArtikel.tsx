@@ -11,6 +11,7 @@ import { useParams } from "next/navigation";
 
 export const DetailArtikel = () => {
   const [artikel, setArtikelData] = useState<Artikel | null>(null);
+  const [pengurusData, setPengurusData] = useState<any | null>(null); // State to store pengurus data
   const { id } = useParams();
 
   useEffect(() => {
@@ -33,6 +34,12 @@ export const DetailArtikel = () => {
       );
       setArtikelData(response.data);
 
+      // Fetch and set pengurus data
+      const pengurusResponse = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/pengurus-panti/${response.data.pengurus_panti_id}`
+      );
+      setPengurusData(pengurusResponse.data);
+
       // Dynamically set the title based on artikel.judul
       document.title = `${response.data.judul} - Panti Asuhan App`;
     } catch (error) {
@@ -40,16 +47,16 @@ export const DetailArtikel = () => {
     }
   };
 
-  if (!artikel) {
+  if (!artikel || !pengurusData) {
     return <p>Loading...</p>;
   }
 
   return (
     <div className="lg:px-35 px-4 py-8 lg:py-16 text-background2 bg-white">
-      <h1 className="lg:text-4xl  text-3xl font-bold mb-2">{artikel.judul}</h1>
+      <h1 className="lg:text-4xl text-3xl font-bold mb-2">{artikel.judul}</h1>
       <div className="flex flex-col justify-between leading-normal w-full mb-5">
         <p className="">
-          Admin,
+          {pengurusData.nama},
           <span className="ml-1">
             {artikel.created_at
               ? new Date(artikel.created_at).toLocaleDateString("id-ID", {
