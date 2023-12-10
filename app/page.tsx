@@ -1,6 +1,6 @@
 import { Footer } from "@/components/Footer/Footer";
 import { Jumbotron } from "@/components/Jumbotron/Jumbotron";
-import { Artikel } from "@/components/LandingPage/Artikel";
+import Artikel from "@/components/LandingPage/Artikel";
 import Description from "@/components/LandingPage/Description";
 import Program from "@/components/LandingPage/Program";
 import Navbar from "@/components/Navbar/Navbar";
