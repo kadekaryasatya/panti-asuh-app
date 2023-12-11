@@ -6,8 +6,8 @@ import Program from "@/components/Program/Program";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Program Page ",
-  description: "This is Program page for Panti Asuhan App",
+  title: "Program | SIMPATI ",
+  description: "This is Program Page for SIMPATI ",
   // other metadata
 };
 
