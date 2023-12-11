@@ -11,14 +11,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 const Artikel = () => {
   const [artikel, setArtikelData] = useState<Artikel[]>([]);
   const [pengurusData, setPengurusData] = useState<any[]>([]); // State to store pengurus data
-  const [pagination, setPagination] = useState({
-    total: 0,
-    per_page: 5,
-    current_page: 1,
-    last_page: 1,
-    from: 1,
-    to: 1,
-  });
 
   useEffect(() => {
     fetchData();
@@ -30,11 +22,11 @@ const Artikel = () => {
     fetchData();
   }, []);
 
-  const fetchData = async (page = 1) => {
+  const fetchData = async () => {
     try {
       const authToken = Cookies.get("auth_token");
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/artikel?page=${page}`,
+        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/artikel`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -44,20 +36,6 @@ const Artikel = () => {
 
       // Set artikel data
       setArtikelData(response.data.data);
-      setPagination(response.data.pagination);
-
-      // Fetch and set pengurus data for each artikel
-      const pengurusPromises = response.data.data.map(
-        async (artikelItem: any) => {
-          const pengurusResponse = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_BACKEND}/api/pengurus-panti/${artikelItem.pengurus_panti_id}`
-          );
-          return pengurusResponse.data;
-        }
-      );
-
-      const pengurusDataArray = await Promise.all(pengurusPromises);
-      setPengurusData(pengurusDataArray);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -65,9 +43,7 @@ const Artikel = () => {
     }
   };
 
-  const handlePageChange = (page: number) => {
-    fetchData(page);
-  };
+  console.log("artikel :>> ", artikel);
 
   return (
     <>
@@ -123,15 +99,13 @@ const Artikel = () => {
                   <Image
                     width={300}
                     height={300}
-                    src={`${process.env.NEXT_PUBLIC_API_BACKEND}/storage/artikel/${artikelItem.gambar}`}
+                    src={`${process.env.NEXT_PUBLIC_API_BACKEND}/artikel/${artikelItem.gambar}`}
                     alt="Logo"
                     className="h-[200px] w-full object-cover rounded-t-lg"
                   />
                   <div className="flex flex-col justify-between p-4 leading-normal w-full">
                     <div className="flex text-xs">
-                      {pengurusData[key] && (
-                        <p className="">{pengurusData[key].nama},</p>
-                      )}
+                      <p className="">{artikelItem.users.name},</p>
                       <span className="ml-1">
                         {artikelItem.created_at
                           ? new Date(artikelItem.created_at).toLocaleDateString(
@@ -161,26 +135,6 @@ const Artikel = () => {
               </p>
             )}
           </div>
-          {pagination.total > pagination.per_page && (
-            <div className="flex justify-center mt-4">
-              <ul className="flex gap-1">
-                {[...Array(pagination.last_page).keys()].map((page) => (
-                  <li key={page + 1}>
-                    <button
-                      onClick={() => handlePageChange(page + 1)}
-                      className={`px-3 py-2 rounded-md ${
-                        pagination.current_page === page + 1
-                          ? "bg-background2 text-white border"
-                          : "bg-white border "
-                      }`}
-                    >
-                      {page + 1}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
       </div>
     </>

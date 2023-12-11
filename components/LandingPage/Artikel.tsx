@@ -32,14 +32,8 @@ const Artikel = () => {
 
   const fetchData = async (page = 1) => {
     try {
-      const authToken = Cookies.get("auth_token");
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/artikel?page=${page}`,
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
+        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/artikel?page=${page}`
       );
 
       setArtikelData(response.data.data);
@@ -116,7 +110,7 @@ const Artikel = () => {
                   <Image
                     width={300}
                     height={300}
-                    src={`${process.env.NEXT_PUBLIC_API_BACKEND}/storage/artikel/${artikelItem.gambar}`}
+                    src={`${process.env.NEXT_PUBLIC_API_BACKEND}/artikel/${artikelItem.gambar}`}
                     alt="Logo"
                     className="object-cover w-full  h-96 md:h-[300px] md:w-[400px] md:rounded-none "
                   />

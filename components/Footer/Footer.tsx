@@ -3,7 +3,7 @@ import React from "react";
 
 export const Footer = () => {
   return (
-    <footer className="bg-background dark:bg-gray-900">
+    <footer className="bg-background dark:bg-gray-900 text-background2">
       <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
@@ -14,7 +14,7 @@ export const Footer = () => {
                 src={"/images/logo/panti-logo.png"}
                 alt="Logo"
               />{" "}
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white text-[#23549e]">
                 SIMPATI
               </span>
             </a>
@@ -22,43 +22,49 @@ export const Footer = () => {
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
             <div>
               <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                Resources
+                Kontribusi
               </h2>
               <ul className="text-gray-500 dark:text-gray-400 font-medium">
                 <li className="mb-4">
-                  <a href="https://flowbite.com/" className="hover:underline">
-                    Flowbite
+                  <a href="/donasi" className="hover:underline">
+                    Donasi
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="https://tailwindcss.com/"
-                    className="hover:underline"
-                  >
-                    Tailwind CSS
+                  <a href="/buat-program" className="hover:underline">
+                    Buat Program{" "}
                   </a>
                 </li>
               </ul>
             </div>
             <div>
               <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                Follow us
+                Menu
               </h2>
               <ul className="text-gray-500 dark:text-gray-400 font-medium">
                 <li className="mb-4">
-                  <a
-                    href="https://github.com/themesberg/flowbite"
-                    className="hover:underline "
-                  >
-                    Github
+                  <a href="/" className="hover:underline ">
+                    Beranda
                   </a>
                 </li>
-                <li>
-                  <a
-                    href="https://discord.gg/4eeurUVvTy"
-                    className="hover:underline"
-                  >
-                    Discord
+                <li className="mb-4">
+                  <a href="/anak-asuh" className="hover:underline">
+                    Anak Asuh
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <a href="/pengurus" className="hover:underline">
+                    Pengurus
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <a href="/program" className="hover:underline">
+                    Program
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <a href="/artikel" className="hover:underline">
+                    Artikel
                   </a>
                 </li>
               </ul>
@@ -69,8 +75,8 @@ export const Footer = () => {
               </h2>
               <ul className="text-gray-500 dark:text-gray-400 font-medium">
                 <li className="mb-4">
-                  <a href="#" className="hover:underline">
-                    Privacy Policy
+                  <a href="/tentang-kami" className="hover:underline">
+                    Tentang Kami
                   </a>
                 </li>
                 <li>
@@ -87,11 +93,11 @@ export const Footer = () => {
           <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2023{" "}
             <a href="https://flowbite.com/" className="hover:underline">
-              Flowbite™
+              SIMPATI™
             </a>
             . All Rights Reserved.
           </span>
-          <div className="flex mt-4 sm:justify-center sm:mt-0">
+          {/* <div className="flex mt-4 sm:justify-center sm:mt-0">
             <a
               href="#"
               className="text-gray-500 hover:text-gray-900 dark:hover:text-white"
@@ -183,7 +189,7 @@ export const Footer = () => {
               </svg>
               <span className="sr-only">Dribbble account</span>
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>
