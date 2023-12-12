@@ -11,7 +11,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-const Program = () => {
+const ProgramDonatur = () => {
   const [program, setProgramData] = useState<ProgramPanti[]>([]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const Program = () => {
         <div className="lg:flex gap-5 items-center mb-10">
           <hr className="max-w-full w-[68px] border border-t-6 border-t-[#23549e] " />
           <h1 className="lg:text-4xl text-2xl font-extrabold text-background2 mt-2 lg:mt-0">
-            <span className="text-[#23549e] "> Program </span> Kami
+            <span className="text-[#23549e] "> Program </span> Donatur
           </h1>
         </div>
         <Link
@@ -85,7 +85,7 @@ const Program = () => {
               .slice(0, 3)
               .filter(
                 (programItem) =>
-                  programItem.isAdmin === "True" &&
+                  programItem.isAdmin === "False" &&
                   programItem.isValid === "True"
               )
               .map((programItem, key) => (
@@ -138,4 +138,4 @@ const Program = () => {
   );
 };
 
-export default Program;
+export default ProgramDonatur;

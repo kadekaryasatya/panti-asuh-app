@@ -5,6 +5,8 @@ import { FaWallet, FaMoneyCheckAlt } from "react-icons/fa";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
 import { JenisProgram } from "@/types/jenis-program";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 const BuatProgramForm = () => {
   const [programData, setProgramData] = useState({
@@ -15,6 +17,7 @@ const BuatProgramForm = () => {
     jadwal: "",
     deskripsi: "",
     isAdmin: "False",
+    isValid: "False",
   });
 
   const [thumbnail, setThumbnail] = useState<File | null>(null); // Specify thumbnail type
@@ -40,7 +43,6 @@ const BuatProgramForm = () => {
     fetchJenisProgramOptions();
   }, []); // Run the effect only once on component mount
 
-  console.log("jenisProgramOptions :>> ", jenisProgramOptions);
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -70,6 +72,8 @@ const BuatProgramForm = () => {
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
+  const router = useRouter();
+
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (
     e
   ) => {
@@ -83,6 +87,7 @@ const BuatProgramForm = () => {
       formData.append("jadwal", programData.jadwal);
       formData.append("deskripsi", programData.deskripsi);
       formData.append("isAdmin", programData.isAdmin);
+      formData.append("isValid", programData.isValid);
 
       // Append jenis_program_id to FormData
       formData.append("jenis_program_id", programData.jenisProgramId);
@@ -97,6 +102,12 @@ const BuatProgramForm = () => {
       );
 
       console.log("Program created successfully:", programResponse.data);
+      Swal.fire({
+        title: "Terimakasih",
+        text: "Tunggu balasan admin melalui email anda",
+        icon: "success",
+      });
+      router.push("/program");
     } catch (error) {
       console.error("Error creating program:", error);
     }
@@ -105,27 +116,6 @@ const BuatProgramForm = () => {
   return (
     <div>
       <section className="bg-white dark:bg-gray-900 text-background2">
-        <div className="relative text-center ">
-          {/* Image */}
-          <Image
-            width={700}
-            height={700}
-            src={"/images/program/program.png"}
-            alt="Background"
-            className="object-cover w-full lg:h-[400px] h-[300px] brightness-50 "
-          />
-
-          {/* Text Overlay */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white">
-            <hr className="max-w-full w-[68px] border border-t-6  mx-auto mb-5" />
-            <h1 className="lg:text-4xl text-lg font-extrabold text-white">
-              Tindakan Kebaikan Memberi Sayap
-            </h1>
-            <h1 className="lg:text-3xl text-lg mt-2 text-white">
-              Pada Impian Anak-Anak Panti Asuhan
-            </h1>
-          </div>
-        </div>
         <div className="py-8 lg:py-16 px-4 ">
           <div className="lg:flex  justify-between gap-10 lg:px-30">
             <div className="shadow-lg p-5 lg:w-1/2 border-[#eee] border">
@@ -149,7 +139,7 @@ const BuatProgramForm = () => {
                     type="text"
                     id="judul"
                     className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                    placeholder="Masukkan Jumlah Donasi Anda"
+                    placeholder="Masukkan judul program"
                     required
                   />
                 </div>

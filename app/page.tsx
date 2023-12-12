@@ -3,6 +3,7 @@ import { Jumbotron } from "@/components/Jumbotron/Jumbotron";
 import Artikel from "@/components/LandingPage/Artikel";
 import Description from "@/components/LandingPage/Description";
 import Program from "@/components/LandingPage/Program";
+import ProgramDonatur from "@/components/LandingPage/ProgramDonatur";
 import Navbar from "@/components/Navbar/Navbar";
 import { Metadata } from "next";
 
@@ -19,6 +20,7 @@ export default function LandingPage() {
       <Jumbotron />
       <Description />
       <Program />
+      <ProgramDonatur />
       <Artikel />
       <Footer />
     </div>
