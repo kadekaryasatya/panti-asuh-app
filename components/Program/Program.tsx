@@ -114,7 +114,7 @@ const Program = () => {
                       <Image
                         width={300}
                         height={300}
-                        src={`http://127.0.0.1:8000program-panti/${programItem.gambar_thumbnail}`}
+                        src={`http://127.0.0.1:8000/program-panti/${programItem.gambar_thumbnail}`}
                         alt="Logo"
                         className="h-[200px] w-full object-cover rounded-t-lg"
                       />
