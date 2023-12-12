@@ -10,7 +10,6 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 const Artikel = () => {
   const [artikel, setArtikelData] = useState<Artikel[]>([]);
-  const [pengurusData, setPengurusData] = useState<any[]>([]); // State to store pengurus data
 
   useEffect(() => {
     fetchData();
@@ -42,8 +41,6 @@ const Artikel = () => {
       setLoading(false);
     }
   };
-
-  console.log("artikel :>> ", artikel);
 
   return (
     <>

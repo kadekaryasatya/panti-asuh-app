@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Image from "next/image";
 
-import { Metadata } from "next";
 import { useParams } from "next/navigation";
 
 export const DetailArtikel = () => {
@@ -34,7 +33,7 @@ export const DetailArtikel = () => {
       setArtikelData(response.data);
 
       // Dynamically set the title based on artikel.judul
-      document.title = `${response.data.judul} - Panti Asuhan App`;
+      document.title = `${response.data.judul} - SIMPATI`;
     } catch (error) {
       console.error("Error fetching artikel details:", error);
     }

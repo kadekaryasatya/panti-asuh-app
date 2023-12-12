@@ -13,16 +13,6 @@ import Image from "next/image";
 
 const Artikel = () => {
   const [artikel, setArtikelData] = useState<Artikel[]>([]);
-  const [pengurusData, setPengurusData] = useState<any[]>([]);
-
-  const [pagination, setPagination] = useState({
-    total: 0,
-    per_page: 5,
-    current_page: 1,
-    last_page: 1,
-    from: 1,
-    to: 1,
-  });
 
   const [loading, setLoading] = useState(true);
 
@@ -30,26 +20,13 @@ const Artikel = () => {
     fetchData();
   }, []);
 
-  const fetchData = async (page = 1) => {
+  const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/artikel?page=${page}`
+        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/artikel`
       );
 
       setArtikelData(response.data.data);
-      setPagination(response.data.pagination);
-
-      const pengurusPromises = response.data.data.map(
-        async (artikelItem: any) => {
-          const pengurusResponse = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_BACKEND}/api/pengurus-panti/${artikelItem.pengurus_panti_id}`
-          );
-          return pengurusResponse.data;
-        }
-      );
-
-      const pengurusDataArray = await Promise.all(pengurusPromises);
-      setPengurusData(pengurusDataArray);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -64,7 +41,7 @@ const Artikel = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 3000, // Set autoplay speed to 5000 milliseconds (5 seconds)
+    autoplaySpeed: 2000, // Set autoplay speed to 5000 milliseconds (5 seconds)
   };
 
   return (
@@ -86,16 +63,20 @@ const Artikel = () => {
       <div className="">
         {loading ? (
           // Display skeleton cards while loading
-          [...Array(6)].map((_, index) => (
-            <div key={index} className="">
-              <Skeleton height={200} width="100%" />
-              <div className="flex flex-col justify-between leading-normal w-full">
-                <Skeleton height={16} width={100} />
-                <Skeleton height={24} width={200} />
-                <Skeleton height={60} width="100%" />
+          <div className=" w-full flex flex-col items-center  md:flex-row  rounded-lg">
+            <Skeleton
+              height={350}
+              width={400}
+              className="w-full md:rounded-none "
+            />
+            <div className="flex flex-col justify-between p-4 leading-normal">
+              <div className="flex text-sm">
+                <Skeleton height={20} width={200} />
               </div>
+              <Skeleton height={60} width={600} />
+              <Skeleton height={60} width={800} />
             </div>
-          ))
+          </div>
         ) : artikel.length > 0 ? (
           <Slider
             {...settings}
@@ -105,7 +86,7 @@ const Artikel = () => {
               <div key={key} className="slide-gap ">
                 <Link
                   href={`/artikel/${artikelItem.id}`}
-                  className=" w-full flex flex-col items-center bg-[#F5F7F8]  md:flex-row shadow-lg rounded-lg  "
+                  className=" w-full flex flex-col items-center bg-[#F5F7F8]  md:flex-row shadow-lg rounded-lg"
                 >
                   <Image
                     width={300}
@@ -116,9 +97,7 @@ const Artikel = () => {
                   />
                   <div className="flex flex-col justify-between p-4 leading-normal">
                     <div className="flex text-sm">
-                      {pengurusData[key] && (
-                        <p className="">{pengurusData[key].nama},</p>
-                      )}
+                      <p className="">{artikelItem.users.name},</p>
                       <span className="ml-1">
                         {artikelItem.created_at
                           ? new Date(artikelItem.created_at).toLocaleDateString(

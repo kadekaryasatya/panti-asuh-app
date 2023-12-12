@@ -1,6 +1,4 @@
-import Calendar from "@/components/Calender";
 import { Footer } from "@/components/Footer/Footer";
-import AnakPanti from "@/components/List/AnakPanti";
 import Navbar from "@/components/Navbar/Navbar";
 import Program from "@/components/Program/Program";
 import { Metadata } from "next";
