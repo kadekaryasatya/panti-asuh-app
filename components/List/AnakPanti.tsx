@@ -18,7 +18,7 @@ const AnakPanti = () => {
       try {
         const authToken = Cookies.get("auth_token");
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BACKEND}/api/anak-asuh`,
+          `http://127.0.0.1:8000/api/anak-asuh`,
           {
             headers: {
               Authorization: `Bearer ${authToken}`,

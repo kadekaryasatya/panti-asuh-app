@@ -23,7 +23,7 @@ export const DetailArtikel = () => {
       const authToken = Cookies.get("auth_token");
 
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/artikel/${articleId}`,
+        `http://127.0.0.1:8000/api/artikel/${articleId}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -48,7 +48,7 @@ export const DetailArtikel = () => {
       <h1 className="lg:text-4xl text-3xl font-bold mb-2">{artikel.judul}</h1>
       <div className="flex flex-col justify-between leading-normal w-full mb-5">
         <p className="">
-          {artikel.users.name},
+          Admin,
           <span className="ml-1">
             {artikel.created_at
               ? new Date(artikel.created_at).toLocaleDateString("id-ID", {
@@ -63,7 +63,7 @@ export const DetailArtikel = () => {
       <Image
         width={300}
         height={300}
-        src={`${process.env.NEXT_PUBLIC_API_BACKEND}/artikel/${artikel.gambar}`}
+        src={`http://127.0.0.1:8000/artikel/${artikel.gambar}`}
         alt="Logo"
         className="h-[500px] w-full object-cover rounded-t-lg"
       />

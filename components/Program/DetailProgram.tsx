@@ -23,7 +23,7 @@ export const DetailProgram = () => {
       const authToken = Cookies.get("auth_token");
 
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/program-panti/${programid}`,
+        `http://127.0.0.1:8000/api/program-panti/${programid}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -63,7 +63,7 @@ export const DetailProgram = () => {
       <Image
         width={300}
         height={300}
-        src={`${process.env.NEXT_PUBLIC_API_BACKEND}/program-panti/${program.gambar_thumbnail}`}
+        src={`http://127.0.0.1:8000/program-panti/${program.gambar_thumbnail}`}
         alt="Logo"
         className="h-[500px] w-full object-cover rounded-t-lg"
       />

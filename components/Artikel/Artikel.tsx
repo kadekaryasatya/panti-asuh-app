@@ -96,13 +96,13 @@ const Artikel = () => {
                   <Image
                     width={300}
                     height={300}
-                    src={`${process.env.NEXT_PUBLIC_API_BACKEND}/artikel/${artikelItem.gambar}`}
+                    src={`http://127.0.0.1:8000/artikel/${artikelItem.gambar}`}
                     alt="Logo"
                     className="h-[200px] w-full object-cover rounded-t-lg"
                   />
                   <div className="flex flex-col justify-between p-4 leading-normal w-full">
                     <div className="flex text-xs">
-                      <p className="">{artikelItem.users.name},</p>
+                      <p className="">Admin,</p>
                       <span className="ml-1">
                         {artikelItem.created_at
                           ? new Date(artikelItem.created_at).toLocaleDateString(

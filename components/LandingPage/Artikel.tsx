@@ -22,9 +22,7 @@ const Artikel = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BACKEND}/api/artikel`
-      );
+      const response = await axios.get(`http://127.0.0.1:8000/api/artikel`);
 
       setArtikelData(response.data.data);
     } catch (error) {
@@ -91,13 +89,13 @@ const Artikel = () => {
                   <Image
                     width={300}
                     height={300}
-                    src={`${process.env.NEXT_PUBLIC_API_BACKEND}/artikel/${artikelItem.gambar}`}
+                    src={`http://127.0.0.1:8000/artikel/${artikelItem.gambar}`}
                     alt="Logo"
                     className="object-cover w-full  h-96 md:h-[300px] md:w-[400px] md:rounded-none "
                   />
                   <div className="flex flex-col justify-between p-4 leading-normal">
                     <div className="flex text-sm">
-                      <p className="">{artikelItem.users.name},</p>
+                      <p className="">Admin,</p>
                       <span className="ml-1">
                         {artikelItem.created_at
                           ? new Date(artikelItem.created_at).toLocaleDateString(
