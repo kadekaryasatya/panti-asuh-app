@@ -20,7 +20,6 @@ export default function LandingPage() {
       <Jumbotron />
       <Description />
       <Program />
-      <ProgramDonatur />
       <Artikel />
       <Footer />
     </div>

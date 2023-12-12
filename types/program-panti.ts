@@ -5,8 +5,7 @@ export type ProgramPanti = {
   jadwal: string;
   deskripsi: number;
   gambar_thumbnail: string | null;
-  isAdmin: string;
-  isValid: string;
+  status: string;
   nama: string;
   email: string;
   created_at?: string | null;

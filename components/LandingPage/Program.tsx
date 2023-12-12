@@ -83,11 +83,7 @@ const Program = () => {
           ) : program.length > 0 ? (
             program
               .slice(0, 3)
-              .filter(
-                (programItem) =>
-                  programItem.isAdmin === "True" &&
-                  programItem.isValid === "True"
-              )
+              .filter((programItem) => programItem.status === "disetujui")
               .map((programItem, key) => (
                 <Link
                   key={key}

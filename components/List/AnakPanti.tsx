@@ -115,52 +115,47 @@ const AnakPanti = () => {
               </tr>
             </thead>
             <tbody>
-              {loading ? (
-                // Display skeleton cards while loading
-                [...Array(6)].map((_, index) => (
-                  <tr key={index} className="">
-                    <th
-                      scope="row"
-                      className="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      <Skeleton height={20} width={50} />
-                    </th>
-                    <td className="px-6 py-4">
-                      <Skeleton height={20} width={80} />
-                    </td>
-                    <td className="px-6 py-4">
-                      <Skeleton height={20} width={80} />
-                    </td>
-                    <td className="px-6 py-4">
-                      <Skeleton height={20} width={80} />
-                    </td>
-                    <td className="px-6 py-4">
-                      <Skeleton height={20} width={50} />
-                    </td>
-                  </tr>
-                ))
-              ) : anak.length > 0 ? (
-                currentItems.map((anakItem, index) => (
-                  <tr key={index} className="shadow-lg  mb-4 ">
-                    <th
-                      scope="row"
-                      className="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {index + 1 + indexOfFirstItem}
-                    </th>
-                    <td className="px-6 py-4">{anakItem.nama}</td>
-                    <td className="px-6 py-4">{anakItem.tempat_lahir}</td>
-                    <td className="px-6 py-4">{anakItem.jenis_kelamin}</td>
-                    <td className="px-6 py-4">
-                      {calculateAge(anakItem.tanggal_lahir)}
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <td className="font-medium text-black dark:text-white">
-                  Tidak ada data Anak
-                </td>
-              )}
+              {loading
+                ? // Display skeleton cards while loading
+                  [...Array(6)].map((_, index) => (
+                    <tr key={index} className="">
+                      <th
+                        scope="row"
+                        className="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        <Skeleton height={20} width={50} />
+                      </th>
+                      <td className="px-6 py-4">
+                        <Skeleton height={20} width={80} />
+                      </td>
+                      <td className="px-6 py-4">
+                        <Skeleton height={20} width={80} />
+                      </td>
+                      <td className="px-6 py-4">
+                        <Skeleton height={20} width={80} />
+                      </td>
+                      <td className="px-6 py-4">
+                        <Skeleton height={20} width={50} />
+                      </td>
+                    </tr>
+                  ))
+                : anak.length > 0 &&
+                  currentItems.map((anakItem, index) => (
+                    <tr key={index} className="shadow-lg  mb-4 ">
+                      <th
+                        scope="row"
+                        className="pl-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                      >
+                        {index + 1 + indexOfFirstItem}
+                      </th>
+                      <td className="px-6 py-4">{anakItem.nama}</td>
+                      <td className="px-6 py-4">{anakItem.tempat_lahir}</td>
+                      <td className="px-6 py-4">{anakItem.jenis_kelamin}</td>
+                      <td className="px-6 py-4">
+                        {calculateAge(anakItem.tanggal_lahir)}
+                      </td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </div>

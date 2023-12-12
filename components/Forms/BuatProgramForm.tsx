@@ -16,8 +16,7 @@ const BuatProgramForm = () => {
     email: "",
     jadwal: "",
     deskripsi: "",
-    isAdmin: "False",
-    isValid: "False",
+    status: "pending",
   });
 
   const [thumbnail, setThumbnail] = useState<File | null>(null); // Specify thumbnail type
@@ -86,8 +85,7 @@ const BuatProgramForm = () => {
       formData.append("email", programData.email);
       formData.append("jadwal", programData.jadwal);
       formData.append("deskripsi", programData.deskripsi);
-      formData.append("isAdmin", programData.isAdmin);
-      formData.append("isValid", programData.isValid);
+      formData.append("status", programData.status);
 
       // Append jenis_program_id to FormData
       formData.append("jenis_program_id", programData.jenisProgramId);

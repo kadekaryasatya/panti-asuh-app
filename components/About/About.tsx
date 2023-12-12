@@ -15,7 +15,38 @@ const About = () => {
           SIMPATI
         </span>
       </div>
-      <div className="mb-20">
+      <div className="lg:flex gap-5 items-center">
+        <hr className="max-w-full w-[68px] border border-t-6 border-t-[#23549e] " />
+        <h1 className="lg:text-4xl text-2xl font-extrabold text-background2 mt-2 lg:mt-0">
+          Apa itu<span className="text-[#23549e] "> SIMPATI </span>?
+        </h1>
+      </div>
+      <p className="mt-10">
+        SIMPATI adalah organisasi nirlaba yang memberikan kepedulian terhadap
+        anak-anak yatim piatu dan rentan di daerah Denpasar khususnya.
+      </p>
+      <p className="mt-10">
+        Kami memberdayakan anak-anak, remaja, dan keluarga untuk menavigasi
+        perubahan secara efektif, membesarkan anak-anak yang sehat,
+        mengembangkan hubungan yang kuat, dan menyembuhkan trauma. Kami
+        menawarkan dukungan rutin dan konsisten kepada mereka yang membutuhkan
+        sehingga anak-anak yang kami asuh dapat berkembang seiring berjalannya
+        waktu, memberi mereka kesempatan untuk menciptakan masa depan yang lebih
+        cerah.
+      </p>
+
+      <p className="mt-10">
+        SIMPATI telah membuka program untuk anak yatim piatu, keluarga dan
+        komunitas sejak tahun 2023. Kami menyediakan program remaja dan keluarga
+        yang meliputi pengasuhan keluarga, adopsi, pencegahan pengasuhan melalui
+        penguatan keluarga, kesehatan mental dan perilaku, dukungan pengasuhan
+        anak, setelah sekolah, dan pengembangan remaja.SIMPATI mempekerjakan
+        sekitar 280 staf penuh waktu dan 150 staf paruh waktu/on-call dan
+        mengelola lebih dari 300 sukarelawan dan pendukung yang berkumpul untuk
+        membantu anak-anak yatim piatu setiap tahunnya.
+      </p>
+
+      <div className="mb-20 mt-20">
         <h1 className="lg:text-3xl font-bold  mb-5 uppercase">
           Latar Belakang
         </h1>

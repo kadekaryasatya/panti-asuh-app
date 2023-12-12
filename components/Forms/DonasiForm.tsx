@@ -2,8 +2,79 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { FaWallet, FaMoneyCheckAlt } from "react-icons/fa";
+import axios from "axios";
+import { useDropzone } from "react-dropzone";
+import { JenisProgram } from "@/types/jenis-program";
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 const DonasiForm = () => {
+  const [donasiData, setDonasiData] = useState({
+    nama: "",
+    email: "",
+    nominal: "",
+    pesan: "",
+    donatur: "individu",
+  });
+
+  const [thumbnail, setThumbnail] = useState<File | null>(null); // Specify thumbnail type
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { id, value } = e.target;
+    setDonasiData((prevData) => ({
+      ...prevData,
+      [id]: value,
+    }));
+  };
+
+  const onDrop = (acceptedFiles: File[]) => {
+    // Assuming you want to handle only one image
+    const file = acceptedFiles[0];
+    setThumbnail(file);
+
+    // Create a preview URL for the selected image
+    setThumbnailPreview(URL.createObjectURL(file));
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+  const router = useRouter();
+
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (
+    e
+  ) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append("nama", donasiData.nama);
+      formData.append("email", donasiData.email);
+      formData.append("nominal", donasiData.nominal);
+      formData.append("pesan", donasiData.pesan);
+      formData.append("donatur", donasiData.donatur);
+
+      if (thumbnail) {
+        formData.append("bukti_bayar", thumbnail);
+      }
+
+      await axios.post("http://127.0.0.1:8000/api/donasi", formData);
+
+      Swal.fire({
+        title: "Terimakasih",
+        text: "Donasi Anda telah berhasil diproses!",
+        icon: "success",
+      });
+      router.push("/donasi");
+    } catch (error) {
+      console.error("Error Donasi:", error);
+    }
+  };
+
+  //Meode Pembayaran
+
   const [showImage, setShowImage] = useState(false);
   const [showImageBank, setShowImageBank] = useState(false);
 
@@ -58,13 +129,21 @@ const DonasiForm = () => {
                   >
                     Nominal
                   </label>
-                  <input
-                    type="text"
-                    id="nominal"
-                    className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                    placeholder="Masukkan Jumlah Donasi Anda"
-                    required
-                  />
+                  <div className="relative">
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 dark:text-gray-400">
+                      Rp
+                    </span>
+                    <input
+                      value={donasiData.nominal}
+                      onChange={handleInputChange}
+                      type="text"
+                      name="nominal"
+                      id="nominal"
+                      className="block p-3 pl-10 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
+                      placeholder="Masukkan Jumlah Donasi Anda"
+                      required
+                    />
+                  </div>
                 </div>
                 <div>
                   <label
@@ -74,6 +153,8 @@ const DonasiForm = () => {
                     Nama
                   </label>
                   <input
+                    value={donasiData.nama}
+                    onChange={handleInputChange}
                     type="text"
                     id="nama"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
@@ -89,6 +170,8 @@ const DonasiForm = () => {
                     Email
                   </label>
                   <input
+                    value={donasiData.email}
+                    onChange={handleInputChange}
                     type="email"
                     id="email"
                     className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
@@ -104,6 +187,8 @@ const DonasiForm = () => {
                     Pesan
                   </label>
                   <textarea
+                    value={donasiData.pesan}
+                    onChange={handleInputChange}
                     id="pesan"
                     rows={6}
                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
@@ -111,19 +196,40 @@ const DonasiForm = () => {
                   ></textarea>
                 </div>
 
-                <div>
+                <div className="">
                   <label
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    htmlFor="user_avatar"
+                    htmlFor="bukti-bayar"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400"
                   >
-                    Upload Bukti Pembayaran
+                    Upload Bukti transfer
                   </label>
-                  <input
-                    className=" block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                    aria-describedby="user_avatar_help"
-                    id="user_avatar"
-                    type="file"
-                  />
+                  <div
+                    {...getRootProps()}
+                    className="border-2 border-gray-300 border-dashed rounded-md p-4"
+                  >
+                    <input
+                      {...getInputProps()}
+                      className="hidden"
+                      aria-describedby="thumbnail_help"
+                      id="thumbnail"
+                      type="file"
+                    />
+                    <p className="text-center text-gray-600 dark:text-gray-400">
+                      Drag & drop an image here, or click to select one
+                    </p>
+                  </div>
+                  {/* Display the selected thumbnail preview */}
+                  {thumbnailPreview && (
+                    <div className="mt-3">
+                      <Image
+                        width={500}
+                        height={150}
+                        src={thumbnailPreview}
+                        alt="Thumbnail Preview"
+                        className="max-w-full h-auto mx-auto"
+                      />
+                    </div>
+                  )}
                 </div>
               </form>
             </div>
@@ -202,6 +308,7 @@ const DonasiForm = () => {
                 <hr className="text-[#B6BBC4]" />
               </div>
               <button
+                onClick={handleSubmit}
                 type="submit"
                 className="mt-5 w-full py-3 px-5 text-base text-center text-white bg-[#23549e] hover:bg-background2 rounded-lg bg-primary-700  hover:bg-primary-800 focus:ring-4 focus:outline-none font-bold "
               >

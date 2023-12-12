@@ -56,6 +56,12 @@ const Description = () => {
           <h1 className="lg:text-4xl text-2xl mt-2 text-white">
             DAN MENGUBAH CERITA MEREKA
           </h1>
+          <a
+            href="/buat-program"
+            className=" uppercase mt-5 scale-100 hover:scale-110 transition transform ease-in-out tracking-widest inline-flex justify-center items-center py-2 px-4 lg:text-base font-medium text-center text-white hover:bg-background2 bg-[#23549e] rounded-lg text-sm"
+          >
+            Buat Program
+          </a>
         </div>
       </div>
     </section>
