@@ -17,10 +17,6 @@ const Artikel = () => {
 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const authToken = Cookies.get("auth_token");

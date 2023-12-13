@@ -1,12 +1,13 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaWallet, FaMoneyCheckAlt } from "react-icons/fa";
 import axios from "axios";
 import { useDropzone } from "react-dropzone";
-import { JenisProgram } from "@/types/jenis-program";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import { Donasi } from "@/types/donasi";
 
 const DonasiForm = () => {
   const [donasiData, setDonasiData] = useState({
@@ -67,11 +68,54 @@ const DonasiForm = () => {
         text: "Donasi Anda telah berhasil diproses!",
         icon: "success",
       });
-      router.push("/donasi");
+      router.push("/");
     } catch (error) {
       console.error("Error Donasi:", error);
     }
   };
+
+  const [donasiTotal, setDonasiTotalData] = useState<Donasi[]>([]);
+  const [totalDonasi, setTotalDonasi] = useState<number>(0);
+
+  const fetchData = async () => {
+    try {
+      const authToken = Cookies.get("auth_token");
+      const response = await axios.get(`http://127.0.0.1:8000/api/donasi`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      // Set artikel data
+      setDonasiTotalData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const calculateTotalDonasi = () => {
+      // Filter donasi dengan status "berhasil"
+      const donasiBerhasil = donasiTotal.filter(
+        (donasi) => donasi.status === "berhasil"
+      );
+
+      // Menghitung total nominal dari donasi yang berhasil
+      const total = donasiBerhasil.reduce((accumulator, donasi) => {
+        return accumulator + parseInt(donasi.nominal);
+      }, 0);
+
+      // Set state totalDonasi
+      setTotalDonasi(total);
+    };
+
+    // Memanggil fungsi calculateTotalDonasi setiap kali donasiTotal berubah
+    calculateTotalDonasi();
+  }, [donasiTotal]);
 
   //Meode Pembayaran
 
@@ -86,6 +130,29 @@ const DonasiForm = () => {
   const handleClickBank = () => {
     setShowImage(false);
     setShowImageBank((prev) => !prev);
+  };
+
+  const getDonaturLabel = () => {
+    switch (donasiData.donatur) {
+      case "perusahaan":
+        return "Nama Perusahaan";
+      default:
+        return "Nama";
+    }
+  };
+
+  const handleJenisDonaturChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const jenisDonatur = e.target.value;
+
+    // Set jenis donatur pada state
+    setDonasiData((prevData) => ({
+      ...prevData,
+      donatur: jenisDonatur,
+      // Reset nama jika jenis donatur diganti menjadi anonim
+      nama: jenisDonatur === "anonim" ? "anonim" : "",
+    }));
   };
 
   return (
@@ -110,6 +177,9 @@ const DonasiForm = () => {
             <h1 className="lg:text-3xl text-lg mt-2 text-white">
               Setiap Kontribusi adalah Langkah Menuju Mimpi.
             </h1>
+            <div className=" mt-5 scale-100 hover:scale-110 transition transform ease-in-out tracking-widest inline-flex justify-center items-center py-2 px-4 lg:text-base font-medium text-center text-white hover:bg-background2 bg-[#23549e] rounded-lg text-sm">
+              <h1>Total Donasi: Rp.{totalDonasi.toLocaleString()}</h1>
+            </div>
           </div>
         </div>
         <div className="py-8 lg:py-16 px-4 ">
@@ -122,6 +192,26 @@ const DonasiForm = () => {
               <p>Lengkapi data dibawah ini</p>
 
               <form action="#" className="space-y-8 mt-5">
+                <div className="w-full mt-5 lg:mt-0">
+                  <label
+                    htmlFor="jenis-donatur"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Jenis Donatur
+                  </label>
+                  <select
+                    id="jenis-donatur"
+                    value={donasiData.donatur}
+                    onChange={handleJenisDonaturChange}
+                    className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
+                    required
+                  >
+                    <option value="individu">Individu</option>
+                    <option value="perusahaan">Perusahaan</option>
+                    <option value="anonim">Anonim</option>
+                  </select>
+                </div>
+
                 <div>
                   <label
                     htmlFor="nominal"
@@ -150,7 +240,7 @@ const DonasiForm = () => {
                     htmlFor="nama"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
                   >
-                    Nama
+                    {getDonaturLabel()}
                   </label>
                   <input
                     value={donasiData.nama}
@@ -158,8 +248,9 @@ const DonasiForm = () => {
                     type="text"
                     id="nama"
                     className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 dark:shadow-sm-light"
-                    placeholder="Nama"
+                    placeholder={getDonaturLabel()}
                     required
+                    readOnly={donasiData.donatur === "anonim"}
                   />
                 </div>
                 <div>
@@ -215,7 +306,8 @@ const DonasiForm = () => {
                       type="file"
                     />
                     <p className="text-center text-gray-600 dark:text-gray-400">
-                      Drag & drop an image here, or click to select one
+                      Seret & lepas gambar di sini, atau klik untuk memilih
+                      salah satu
                     </p>
                   </div>
                   {/* Display the selected thumbnail preview */}

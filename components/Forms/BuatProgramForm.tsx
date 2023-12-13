@@ -260,7 +260,8 @@ const BuatProgramForm = () => {
                       type="file"
                     />
                     <p className="text-center text-gray-600 dark:text-gray-400">
-                      Drag & drop an image here, or click to select one
+                      Seret & lepas gambar di sini, atau klik untuk memilih
+                      salah satu
                     </p>
                   </div>
                   {/* Display the selected thumbnail preview */}
