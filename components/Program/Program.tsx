@@ -115,7 +115,7 @@ const Program = () => {
                         width={300}
                         height={300}
                         src={`http://127.0.0.1:8000/program-panti/${programItem.gambar_thumbnail}`}
-                        alt="Logo"
+                        alt="Program"
                         className="h-[200px] w-full object-cover rounded-t-lg"
                       />
                       <div className="flex flex-col justify-between p-4 leading-normal w-full">
